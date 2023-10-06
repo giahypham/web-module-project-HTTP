@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
-const EditMovieForm = (props) => {
+const AddMovieForm = (props) => {
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const { setMovies } = props;
   const [movie, setMovie] = useState({
@@ -25,23 +24,12 @@ const EditMovieForm = (props) => {
     });
   }
 
-  //when component mounts, use useEffect()
-  useEffect(() => {
-    axios.get(`http://localhost:9000/api/movies/${id}`)
-      .then(res => {
-        setMovie(res.data);
-      })
-      .catch(err => {
-        console.error(err);
-      })
-  },[id])
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:9000/api/movies/${id}`, movie)
+    axios.post(`http://localhost:9000/api/movies/`, movie)
       .then(res => {
         setMovies(res.data);
-        navigate(`/movies/${movie.id}`);
+        navigate(`/movies`);
       })
       .catch(err => {
         console.log(err);
@@ -55,7 +43,7 @@ const EditMovieForm = (props) => {
       <div className="modal-content">
         <form onSubmit={handleSubmit}>
           <div className="modal-header">
-            <h4 className="modal-title">Editing <strong>{movie.title}</strong></h4>
+            <h4 className="modal-title">Adding <strong>{movie.title}</strong></h4>
           </div>
           {/* defaultValue instead of value for value={title} because the form is not blank by default */}
           <div className="modal-body">
@@ -90,4 +78,4 @@ const EditMovieForm = (props) => {
     </div>);
 }
 
-export default EditMovieForm;
+export default AddMovieForm;
